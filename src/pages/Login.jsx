@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import md5 from 'crypto-js/md5';
 
-export default class Login extends Component {
+class Login extends Component {
   state = {
     name: '',
     email: '',
@@ -23,6 +25,14 @@ export default class Login extends Component {
     } else {
       this.setState({ buttonValidation: true });
     }
+  };
+
+  buttonPlay = () => {
+    const { name, email } = this.state;
+    const { history, dispatch } = this.props;
+    const emailGravatar = md5(email).toString();
+    const userObject = { name, emailGravatar };
+    dispatch();
   };
 
   render() {
@@ -54,6 +64,7 @@ export default class Login extends Component {
             type="button"
             data-testid="btn-play"
             disabled={ buttonValidation }
+            onClick={ this.buttonPlay }
           >
             Play
           </button>
@@ -62,3 +73,5 @@ export default class Login extends Component {
     );
   }
 }
+
+export default connect()(Login);
