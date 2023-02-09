@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
+import saveInfoUser from '../redux/actions/index';
 
 class Login extends Component {
   state = {
@@ -32,7 +33,7 @@ class Login extends Component {
     const { history, dispatch } = this.props;
     const emailGravatar = md5(email).toString();
     const userObject = { name, emailGravatar };
-    dispatch();
+    dispatch(saveInfoUser(userObject));
   };
 
   render() {
