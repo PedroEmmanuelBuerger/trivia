@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Header from '../components/Header';
 import Proptypes from 'prop-types';
+import Header from '../components/Header';
 import logo from '../trivia.png';
 
 class Question extends Component {
@@ -60,23 +60,24 @@ class Question extends Component {
     return (
       <div>
         <Header />
-      <div className="App">
-        <header className="App-header">
-          <img src={ logo } className="App-logo" width="150px" alt="logo" />
-        </header>
-        {currentQuestion ? (
-          <div>
-            <h1 data-testid="question-category">{currentQuestion.category}</h1>
-            <h2 data-testid="question-text">{currentQuestion.question}</h2>
-            <div data-testid="answer-options">
-              {this.shuffleQuestions(
-                currentQuestion.incorrect_answers,
-                currentQuestion.correct_answer,
-              )}
+        <div className="App">
+          <header className="App-header">
+            <img src={ logo } className="App-logo" width="150px" alt="logo" />
+          </header>
+          {currentQuestion ? (
+            <div>
+              <h1 data-testid="question-category">{currentQuestion.category}</h1>
+              <h2 data-testid="question-text">{currentQuestion.question}</h2>
+              <div data-testid="answer-options">
+                {this.shuffleQuestions(
+                  currentQuestion.incorrect_answers,
+                  currentQuestion.correct_answer,
+                )}
+              </div>
             </div>
-          </div>
-        ) : 'Loading...'} 
-       </div>
+          ) : 'Loading...'}
+        </div>
+      </div>
     );
   }
 }
