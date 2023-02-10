@@ -7,11 +7,21 @@ class Question extends Component {
   state = {
     questions: [],
     i: 0,
+    disabled: false,
   };
 
   componentDidMount() {
     this.getQuestions();
+    this.Hourglass();
   }
+
+  Hourglass = () => {
+    const time = 30000;
+    const { disabled } = this.state;
+    setTimeout(() => {
+      this.setState({ disabled: !disabled });
+    }, time);
+  };
 
   getQuestions = async () => {
     const token = localStorage.getItem('token');
@@ -34,10 +44,12 @@ class Question extends Component {
 
   shuffleQuestions = (wrong, correct) => {
     const number = 0.5;
+    const { disabled } = this.state;
     const correctAnswer = (
       <button
         type="button"
         data-testid="correct-answer"
+        disabled={ disabled }
       >
         {correct}
       </button>);
@@ -46,6 +58,7 @@ class Question extends Component {
         key={ index }
         type="button"
         data-testid={ `wrong-answer-${index}` }
+        disabled={ disabled }
       >
         {answer}
       </button>));
