@@ -32,6 +32,7 @@ class Question extends Component {
   };
 
   shuffleQuestions = (wrong, correct) => {
+    const number = 0.5;
     const correctAnswer = (
       <button
         type="button"
@@ -47,9 +48,9 @@ class Question extends Component {
       >
         {answer}
       </button>));
-    const newIndex = Math.floor(Math.random() * wrongAnswers.length);
-    wrongAnswers.splice(newIndex, 0, correctAnswer);
-    return wrongAnswers;
+    const concatAnswers = wrongAnswers.concat(correctAnswer);
+    const shuffle = concatAnswers.sort(() => Math.random() - number);
+    return shuffle;
   };
 
   render() {
