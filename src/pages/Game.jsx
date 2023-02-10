@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Proptypes from 'prop-types';
 import Header from '../components/Header';
 import logo from '../trivia.png';
+import './Game.css';
 
 class Question extends Component {
   state = {
@@ -38,6 +39,8 @@ class Question extends Component {
       <button
         type="button"
         data-testid="correct-answer"
+        id="defaultCorrect"
+        onClick={ () => (this.activeCSS()) }
       >
         {correct}
       </button>);
@@ -46,12 +49,23 @@ class Question extends Component {
         key={ index }
         type="button"
         data-testid={ `wrong-answer-${index}` }
+        onClick={ () => (this.activeCSS()) }
+        id="defaultWrong"
       >
         {answer}
       </button>));
     const concatAnswers = wrongAnswers.concat(correctAnswer);
     const shuffle = concatAnswers.sort(() => Math.random() - number);
     return shuffle;
+  };
+
+  activeCSS = () => {
+    const btnCorrect = document.querySelector('#defaultCorrect');
+    const btnWrong = document.querySelectorAll('#defaultWrong');
+    btnCorrect.className = 'correct-answer';
+    btnWrong.forEach((btn) => {
+      btn.className = 'wrong-answer';
+    });
   };
 
   render() {
