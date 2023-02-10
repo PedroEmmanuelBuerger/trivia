@@ -23,6 +23,8 @@ class Question extends Component {
     }, time);
   };
 
+  }
+
   getQuestions = async () => {
     const token = localStorage.getItem('token');
     const numberError = 3;
