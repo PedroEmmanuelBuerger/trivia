@@ -11,15 +11,6 @@ class Login extends Component {
     buttonValidation: true,
   };
 
-  componentDidMount() {
-    this.getToken();
-  }
-
-  getToken = () => {
-    const token = localStorage.getItem('token');
-    return token ? JSON.parse(token) : '';
-  };
-
   handleChange = ({ target: { name, value } }) => {
     this.setState(() => ({
       [name]: value,
