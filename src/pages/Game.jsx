@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Header from '../components/Header';
 import Proptypes from 'prop-types';
 import logo from '../trivia.png';
 
@@ -57,6 +58,8 @@ class Question extends Component {
     const { questions, i } = this.state;
     const currentQuestion = questions[i];
     return (
+      <div>
+        <Header />
       <div className="App">
         <header className="App-header">
           <img src={ logo } className="App-logo" width="150px" alt="logo" />
@@ -72,8 +75,8 @@ class Question extends Component {
               )}
             </div>
           </div>
-        ) : 'Loading...'}
-      </div>
+        ) : 'Loading...'} 
+       </div>
     );
   }
 }
