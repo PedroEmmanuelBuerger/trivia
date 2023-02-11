@@ -15,6 +15,12 @@ export const userInfo = (state = INITIAL_STATE, action) => {
       name: action.infoUser.name,
       gravatarEmail: action.infoUser.emailGravatar,
     };
+  case 'ADD_SCORE':
+    return {
+      ...state,
+      score: state.score + action.score,
+      assertions: state.assertions + 1,
+    };
   default:
     return state;
   }

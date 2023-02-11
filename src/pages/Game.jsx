@@ -1,26 +1,61 @@
 import React, { Component } from 'react';
 import Proptypes from 'prop-types';
+import { connect } from 'react-redux';
 import Header from '../components/Header';
+import { addScore } from '../redux/actions/index';
 import logo from '../trivia.png';
 import './Game.css';
+
+const correctdefault = 'defaultCorrect';
+const wrongdefault = 'defaultWrong';
 
 class Question extends Component {
   state = {
     questions: [],
     i: 0,
-    disabled: false,
+    timer: 30,
+    suffledQuestions: [],
+    nextButton: false,
   };
 
   componentDidMount() {
     this.getQuestions();
     this.Hourglass();
+    this.timerCount();
   }
+
+  timerCount = () => {
+    const time = 1000;
+    setInterval(() => {
+      const { timer } = this.state;
+      this.setState({ timer: timer - 1 });
+    }, time);
+  };
+
+  resetTimers = () => {
+    this.Hourglass();
+    this.setState({ timer: 30 });
+    const buttons = document.querySelectorAll(`#${wrongdefault}`);
+    const correctButton = document.querySelector(`#${correctdefault}`);
+    correctButton.disabled = false;
+    buttons.forEach((btn) => {
+      btn.disabled = false;
+    });
+  };
+
+  disableButtons = () => {
+    const btnCorrect = document.querySelector(`#${correctdefault}`);
+    const btnWrong = document.querySelectorAll(`#${wrongdefault}`);
+    btnCorrect.disabled = true;
+    btnWrong.forEach((btn) => {
+      btn.disabled = true;
+    });
+  };
 
   Hourglass = () => {
     const time = 30000;
-    const { disabled } = this.state;
     setTimeout(() => {
-      this.setState({ disabled: !disabled });
+      this.disableButtons();
     }, time);
   };
 
@@ -34,7 +69,17 @@ class Question extends Component {
       this.errorResponse();
       return;
     }
-    this.setState({ questions: apiquestions.results });
+    this.setState(() => ({
+      questions: apiquestions.results,
+    }), () => this.getAnswers());
+  };
+
+  getAnswers = () => {
+    const { questions, i } = this.state;
+    const currentQuestion = questions[i];
+    const correct = currentQuestion.correct_answer;
+    const incorrect = currentQuestion.incorrect_answers;
+    this.shuffleQuestions(incorrect, correct);
   };
 
   errorResponse = () => {
@@ -45,14 +90,12 @@ class Question extends Component {
 
   shuffleQuestions = (wrong, correct) => {
     const number = 0.5;
-    const { disabled } = this.state;
     const correctAnswer = (
       <button
         type="button"
         data-testid="correct-answer"
         id="defaultCorrect"
-        onClick={ () => (this.activeCSS()) }
-        disabled={ disabled }
+        onClick={ (e) => (this.ChoiceButton(e)) }
       >
         {correct}
       </button>);
@@ -61,15 +104,46 @@ class Question extends Component {
         key={ index }
         type="button"
         data-testid={ `wrong-answer-${index}` }
-        onClick={ () => (this.activeCSS()) }
+        onClick={ (e) => (this.ChoiceButton(e)) }
         id="defaultWrong"
-        disabled={ disabled }
       >
         {answer}
       </button>));
     const concatAnswers = wrongAnswers.concat(correctAnswer);
     const shuffle = concatAnswers.sort(() => Math.random() - number);
-    return shuffle;
+    return this.setState({ suffledQuestions: shuffle });
+  };
+
+  ChoiceButton = (e) => {
+    this.activeCSS();
+    this.setState({ nextButton: true });
+    const { timer } = this.state;
+    const { className } = e.target;
+    const three = 3;
+    if (className === 'correct-answer') {
+      const { questions, i } = this.state;
+      const currentQuestion = questions[i];
+      const { difficulty } = currentQuestion;
+      let difficuiltyPoints = 0;
+      switch (difficulty) {
+      case 'easy':
+        difficuiltyPoints = 1;
+        break;
+      case 'medium':
+        difficuiltyPoints = 2;
+        break;
+      case 'hard':
+        difficuiltyPoints = three;
+        break;
+      default:
+        difficuiltyPoints = 0;
+      }
+      const points = 10;
+      const timerPoints = timer;
+      const totalPoints = (points + (difficuiltyPoints * timerPoints));
+      const { dispatch } = this.props;
+      dispatch(addScore(totalPoints));
+    }
   };
 
   activeCSS = () => {
@@ -81,8 +155,30 @@ class Question extends Component {
     });
   };
 
+  nextButtonFunction = () => {
+    const number = 4;
+    this.resetTimers();
+    const { i } = this.state;
+    if (i === number) {
+      const { history } = this.props;
+      history.push('/feedback');
+    }
+    this.setState({ i: i + 1 });
+    this.getAnswers();
+    this.resetClass();
+  };
+
+  resetClass = () => {
+    const btnCorrect = document.querySelector('#defaultCorrect');
+    const btnWrong = document.querySelectorAll('#defaultWrong');
+    btnCorrect.className = '';
+    btnWrong.forEach((btn) => {
+      btn.className = '';
+    });
+  };
+
   render() {
-    const { questions, i } = this.state;
+    const { questions, i, suffledQuestions, timer, nextButton } = this.state;
     const currentQuestion = questions[i];
     return (
       <div>
@@ -96,11 +192,18 @@ class Question extends Component {
               <h1 data-testid="question-category">{currentQuestion.category}</h1>
               <h2 data-testid="question-text">{currentQuestion.question}</h2>
               <div data-testid="answer-options">
-                {this.shuffleQuestions(
-                  currentQuestion.incorrect_answers,
-                  currentQuestion.correct_answer,
-                )}
+                { suffledQuestions }
               </div>
+              {timer > 0 ? <h1>{ timer }</h1> : <h1>Acabou o tempo!!</h1>}
+              {nextButton ? (
+                <button
+                  data-testid="btn-next"
+                  type="button"
+                  onClick={ () => this.nextButtonFunction() }
+                >
+                  próxima
+                </button>
+              ) : null}
             </div>
           ) : 'Loading...'}
         </div>
@@ -113,6 +216,7 @@ Question.propTypes = {
   history: Proptypes.shape({
     push: Proptypes.func.isRequired,
   }).isRequired,
+  dispatch: Proptypes.func.isRequired,
 };
 
-export default (Question);
+export default connect()(Question);
