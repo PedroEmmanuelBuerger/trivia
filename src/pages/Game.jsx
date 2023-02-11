@@ -158,9 +158,9 @@ class Question extends Component {
       const { history } = this.props;
       history.push('/feedback');
     }
-    this.setState({ i: i + 1 });
-    this.getAnswers();
-    this.resetClass();
+    this.setState(() => ({
+      i: i + 1,
+    }), () => this.getAnswers(), this.resetClass());
   };
 
   resetClass = () => {
