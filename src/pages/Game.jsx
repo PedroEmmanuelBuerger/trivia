@@ -6,17 +6,22 @@ import { addScore } from '../redux/actions/index';
 import logo from '../trivia.png';
 import './Game.css';
 
+const correctdefault = 'defaultCorrect';
+const wrongdefault = 'defaultWrong';
+
 class Question extends Component {
   state = {
     questions: [],
     i: 0,
     timer: 30,
     suffledQuestions: [],
+    nextButton: false,
   };
 
   componentDidMount() {
     this.getQuestions();
     this.Hourglass();
+    this.timerCount();
   }
 
   timerCount = () => {
@@ -27,9 +32,20 @@ class Question extends Component {
     }, time);
   };
 
+  resetTimers = () => {
+    this.Hourglass();
+    this.setState({ timer: 30 });
+    const buttons = document.querySelectorAll(`#${wrongdefault}`);
+    const correctButton = document.querySelector(`#${correctdefault}`);
+    correctButton.disabled = false;
+    buttons.forEach((btn) => {
+      btn.disabled = false;
+    });
+  };
+
   disableButtons = () => {
-    const btnCorrect = document.querySelector('#defaultCorrect');
-    const btnWrong = document.querySelectorAll('#defaultWrong');
+    const btnCorrect = document.querySelector(`#${correctdefault}`);
+    const btnWrong = document.querySelectorAll(`#${wrongdefault}`);
     btnCorrect.disabled = true;
     btnWrong.forEach((btn) => {
       btn.disabled = true;
@@ -37,7 +53,6 @@ class Question extends Component {
   };
 
   Hourglass = () => {
-    this.timerCount();
     const time = 30000;
     setTimeout(() => {
       this.disableButtons();
@@ -101,6 +116,7 @@ class Question extends Component {
 
   ChoiceButton = (e) => {
     this.activeCSS();
+    this.setState({ nextButton: true });
     const { timer } = this.state;
     const { className } = e.target;
     const three = 3;
@@ -140,7 +156,7 @@ class Question extends Component {
   };
 
   render() {
-    const { questions, i, suffledQuestions, timer } = this.state;
+    const { questions, i, suffledQuestions, timer, nextButton } = this.state;
     const currentQuestion = questions[i];
     return (
       <div>
@@ -157,6 +173,15 @@ class Question extends Component {
                 { suffledQuestions }
               </div>
               {timer > 0 ? <h1>{ timer }</h1> : <h1>Acabou o tempo!!</h1>}
+              {nextButton ? (
+                <button
+                  data-testid="btn-next"
+                  type="button"
+                  onClick={ () => this.resetTimers() }
+                >
+                  próxima
+                </button>
+              ) : null}
             </div>
           ) : 'Loading...'}
         </div>
