@@ -9,6 +9,11 @@ class Feedback extends Component {
     history.push('/');
   };
 
+  redirectionRanking = () => {
+    const { history } = this.props;
+    history.push('/ranking');
+  };
+
   render() {
     return (
 
@@ -21,6 +26,14 @@ class Feedback extends Component {
           onClick={ this.returnLogin }
         >
           Play Again
+        </button>
+
+        <button
+          type="button"
+          data-testid="btn-ranking"
+          onClick={ this.redirectionRanking }
+        >
+          Ranking
         </button>
       </div>
     );
