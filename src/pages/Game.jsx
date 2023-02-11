@@ -155,6 +155,28 @@ class Question extends Component {
     });
   };
 
+  nextButtonFunction = () => {
+    const number = 4;
+    this.resetTimers();
+    const { i } = this.state;
+    if (i === number) {
+      const { history } = this.props;
+      history.push('/feedback');
+    }
+    this.setState({ i: i + 1 });
+    this.getAnswers();
+    this.resetClass();
+  };
+
+  resetClass = () => {
+    const btnCorrect = document.querySelector('#defaultCorrect');
+    const btnWrong = document.querySelectorAll('#defaultWrong');
+    btnCorrect.className = '';
+    btnWrong.forEach((btn) => {
+      btn.className = '';
+    });
+  };
+
   render() {
     const { questions, i, suffledQuestions, timer, nextButton } = this.state;
     const currentQuestion = questions[i];
@@ -177,7 +199,7 @@ class Question extends Component {
                 <button
                   data-testid="btn-next"
                   type="button"
-                  onClick={ () => this.resetTimers() }
+                  onClick={ () => this.nextButtonFunction() }
                 >
                   próxima
                 </button>
