@@ -20,7 +20,6 @@ class Question extends Component {
 
   componentDidMount() {
     this.getQuestions();
-    this.Hourglass();
     this.timerCount();
   }
 
@@ -29,11 +28,11 @@ class Question extends Component {
     setInterval(() => {
       const { timer } = this.state;
       this.setState({ timer: timer - 1 });
+      this.disableButtons();
     }, time);
   };
 
   resetTimers = () => {
-    this.Hourglass();
     this.setState({ timer: 30 });
     const buttons = document.querySelectorAll(`#${wrongdefault}`);
     const correctButton = document.querySelector(`#${correctdefault}`);
@@ -44,19 +43,15 @@ class Question extends Component {
   };
 
   disableButtons = () => {
-    const btnCorrect = document.querySelector(`#${correctdefault}`);
-    const btnWrong = document.querySelectorAll(`#${wrongdefault}`);
-    btnCorrect.disabled = true;
-    btnWrong.forEach((btn) => {
-      btn.disabled = true;
-    });
-  };
-
-  Hourglass = () => {
-    const time = 30000;
-    setTimeout(() => {
-      this.disableButtons();
-    }, time);
+    const { timer } = this.state;
+    if (timer === 0) {
+      const btnCorrect = document.querySelector(`#${correctdefault}`);
+      const btnWrong = document.querySelectorAll(`#${wrongdefault}`);
+      btnCorrect.disabled = true;
+      btnWrong.forEach((btn) => {
+        btn.disabled = true;
+      });
+    }
   };
 
   getQuestions = async () => {
@@ -163,9 +158,9 @@ class Question extends Component {
       const { history } = this.props;
       history.push('/feedback');
     }
-    this.setState({ i: i + 1 });
-    this.getAnswers();
-    this.resetClass();
+    this.setState(() => ({
+      i: i + 1,
+    }), () => this.getAnswers(), this.resetClass());
   };
 
   resetClass = () => {

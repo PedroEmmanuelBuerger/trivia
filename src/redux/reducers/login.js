@@ -21,6 +21,12 @@ export const userInfo = (state = INITIAL_STATE, action) => {
       score: state.score + action.score,
       assertions: state.assertions + 1,
     };
+  case 'RESET_SCORE_AND_ACCUMULATED':
+    return {
+      ...state,
+      score: 0,
+      assertions: 0,
+    };
   default:
     return state;
   }
