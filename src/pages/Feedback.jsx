@@ -6,7 +6,7 @@ import { resetScoreAndAccumulated } from '../redux/actions/index';
 
 class Feedback extends Component {
   state = {
-    assertions: 0,
+    assertionss: 0,
   };
 
   componentDidMount() {
@@ -17,9 +17,9 @@ class Feedback extends Component {
     const number = 3;
     const { assertions } = this.props;
     if (assertions >= number) {
-      this.setState({ assertions: 'Well Done!' });
+      this.setState({ assertionss: 'Well Done!' });
     } else {
-      this.setState({ assertions: 'Could be better...' });
+      this.setState({ assertionss: 'Could be better...' });
     }
   };
 
@@ -35,11 +35,17 @@ class Feedback extends Component {
   };
 
   render() {
-    const { assertions } = this.state;
+    const { assertionss } = this.state;
+    const { score, assertions } = this.props;
     return (
       <div>
         <Header />
-        <h1 data-testid="feedback-text">{ assertions }</h1>
+        <h1 data-testid="feedback-total-score">{ Number(score) }</h1>
+        <h1 data-testid="feedback-total-question">
+          { Number(assertions) }
+
+        </h1>
+        <h1 data-testid="feedback-text">{ assertionss }</h1>
         <button
           type="button"
           data-testid="btn-play-again"
@@ -64,6 +70,7 @@ Feedback.propTypes = {
   history: Proptypes.shape({ push: Proptypes.func.isRequired }).isRequired,
   assertions: Proptypes.number.isRequired,
   dispatch: Proptypes.func.isRequired,
+  score: Proptypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => ({
