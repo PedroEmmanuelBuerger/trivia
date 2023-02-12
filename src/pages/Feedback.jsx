@@ -7,11 +7,33 @@ import { resetScoreAndAccumulated } from '../redux/actions/index';
 class Feedback extends Component {
   state = {
     assertionss: 0,
+    allPlayers: [],
   };
 
   componentDidMount() {
     this.getAssertions();
+    this.saveLocalStorage();
   }
+
+  saveLocalStorage = () => {
+    const players = JSON.parse(localStorage.getItem('players'));
+    const playersOk = (players === null) ? [] : players;
+    this.setState(() => ({
+      allPlayers: playersOk,
+    }), this.saveNewLocal);
+  };
+
+  saveNewLocal = () => {
+    const { allPlayers } = this.state;
+    const { name, score, gravatar } = this.props;
+    const player = {
+      name,
+      score,
+      picture: gravatar,
+    };
+    const newarr = [...allPlayers, player];
+    localStorage.setItem('players', JSON.stringify(newarr));
+  };
 
   getAssertions = () => {
     const number = 3;
@@ -71,6 +93,8 @@ Feedback.propTypes = {
   assertions: Proptypes.number.isRequired,
   dispatch: Proptypes.func.isRequired,
   score: Proptypes.number.isRequired,
+  gravatar: Proptypes.string.isRequired,
+  name: Proptypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
