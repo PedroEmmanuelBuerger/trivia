@@ -52,7 +52,8 @@ class Feedback extends Component {
   };
 
   redirectionRanking = () => {
-    const { history } = this.props;
+    const { history, dispatch } = this.props;
+    dispatch(resetScoreAndAccumulated());
     history.push('/ranking');
   };
 
