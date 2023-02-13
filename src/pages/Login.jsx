@@ -39,10 +39,8 @@ class Login extends Component {
     const token = await fetch('https://opentdb.com/api_token.php?command=request')
       .then((response) => response.json())
       .then((tokens) => tokens);
-    if (localStorageToken) {
-      history.push('/game');
-      return;
-    } localStorage.setItem('token', (token.token));
+    const NewToken = (localStorageToken) || token.token;
+    localStorage.setItem('token', (NewToken));
     history.push('/game');
   };
 

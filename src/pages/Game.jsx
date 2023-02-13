@@ -16,7 +16,6 @@ class Question extends Component {
     timer: 30,
     suffledQuestions: [],
     nextButton: false,
-    stop: false,
   };
 
   componentDidMount() {
@@ -27,8 +26,7 @@ class Question extends Component {
   timerCount = () => {
     const time = 1000;
     setInterval(() => {
-      const { timer, stop } = this.state;
-      if (stop) return;
+      const { timer } = this.state;
       this.setState({ timer: timer - 1 });
       this.disableButtons();
     }, time);
@@ -44,9 +42,10 @@ class Question extends Component {
     });
   };
 
-  disableButtons = () => {
+  disableButtons = (par) => {
     const { timer } = this.state;
-    if (timer === 0) {
+    if (timer === 0 || par) {
+      this.setState({ nextButton: true });
       const btnCorrect = document.querySelector(`#${correctdefault}`);
       const btnWrong = document.querySelectorAll(`#${wrongdefault}`);
       btnCorrect.disabled = true;
@@ -111,15 +110,9 @@ class Question extends Component {
     return this.setState({ suffledQuestions: shuffle });
   };
 
-  stopTimer = () => {
-    this.setState({ stop: true });
-    const { stop } = this.state;
-    return stop;
-  };
-
   ChoiceButton = (e) => {
+    this.disableButtons(true);
     this.activeCSS();
-    this.stopTimer();
     this.setState({ nextButton: true });
     const { timer } = this.state;
     const { className } = e.target;
@@ -130,9 +123,6 @@ class Question extends Component {
       const { difficulty } = currentQuestion;
       let difficuiltyPoints = 0;
       switch (difficulty) {
-      case 'easy':
-        difficuiltyPoints = 1;
-        break;
       case 'medium':
         difficuiltyPoints = 2;
         break;
@@ -140,7 +130,7 @@ class Question extends Component {
         difficuiltyPoints = three;
         break;
       default:
-        difficuiltyPoints = 0;
+        difficuiltyPoints = 1;
       }
       const points = 10;
       const timerPoints = timer;
@@ -160,7 +150,6 @@ class Question extends Component {
   };
 
   nextButtonFunction = () => {
-    this.setState({ stop: false });
     const number = 4;
     this.resetTimers();
     const { i } = this.state;
