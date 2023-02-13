@@ -47,6 +47,7 @@ class Question extends Component {
   disableButtons = () => {
     const { timer } = this.state;
     if (timer === 0) {
+      this.setState({ nextButton: true });
       const btnCorrect = document.querySelector(`#${correctdefault}`);
       const btnWrong = document.querySelectorAll(`#${wrongdefault}`);
       btnCorrect.disabled = true;

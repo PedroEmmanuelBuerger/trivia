@@ -17,7 +17,7 @@ export function AddToken() {
   const api = 'https://opentdb.com/api_token.php?command=request';
   return (dispatch) => fetch(api)
     .then((response) => response.json())
-    .then((token) => console.log(dispatch(saveToken(token))));
+    .then((token) => (dispatch(saveToken(token))));
 }
 
 export const addScore = (score) => ({
