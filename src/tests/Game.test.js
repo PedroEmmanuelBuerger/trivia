@@ -220,6 +220,21 @@ describe('testa a tela de game', () => {
     userEvent.click(correctAnswer);
     expect(score).toHaveTextContent('40');
   });
+  it('verifica se ao errar uma questão o contador de score na tela sobre', async () => {
+    global.fetch = jest.fn(async () => ({
+      json: async () => questions,
+    }));
+    const { history } = renderWithRouterAndRedux(<App />, { ...initialState });
+    act(() => {
+      history.push('/game');
+    });
+  const score = await screen.findByTestId('header-score');
+  expect(score).toBeInTheDocument();
+  expect(score).toHaveTextContent('0');
+  const wrongAnswer1 = await screen.findByTestId('wrong-answer-0');
+  userEvent.click(wrongAnswer1);
+  expect(score).toHaveTextContent('0');
+  });
   it('verifica se ao todo existem 5 perguntas', async () => {
     global.fetch = jest.fn(async () => ({
         json: async () => questions,
@@ -228,16 +243,24 @@ describe('testa a tela de game', () => {
       act(() => {
         history.push('/game');
       });
-    const correctAnswer1 = await screen.findByTestId('correct-answer');
+    const correctAnswer1 = await screen.findByRole('button', { name: /oliver stone/i });
     userEvent.click(correctAnswer1);
     const nextbutton1 = await screen.findByRole('button', { name: /próxima/i });
     userEvent.click(nextbutton1);
+    const correctAnswer2 = await screen.findByRole('button', { name: /Birmingham/i });
+    expect(correctAnswer2).toBeInTheDocument();
     const nextbutton2 = await screen.findByRole('button', { name: /próxima/i });
     userEvent.click(nextbutton2);
+    const correctAnswer3 = await screen.findByRole('button', { name: /Trees/i });
+    expect(correctAnswer3).toBeInTheDocument();
     const nextbutton3 = await screen.findByRole('button', { name: /próxima/i });
     userEvent.click(nextbutton3);
+    const correctAnswer4 = await screen.findByText('Five dollars is worth how many nickles?');
+    expect(correctAnswer4).toBeInTheDocument();
     const nextbutton4 = await screen.findByRole('button', { name: /próxima/i });
     userEvent.click(nextbutton4);
+    const correctAnswer5 = await screen.findByRole('button', { name: /Urea/i });
+    expect(correctAnswer5).toBeInTheDocument();
     const nextbutton5 = await screen.findByRole('button', { name: /próxima/i });
     userEvent.click(nextbutton5);
     expect(nextbutton1).not.toBeInTheDocument();

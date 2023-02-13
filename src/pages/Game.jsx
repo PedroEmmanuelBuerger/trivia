@@ -16,7 +16,6 @@ class Question extends Component {
     timer: 30,
     suffledQuestions: [],
     nextButton: false,
-    stop: false,
   };
 
   componentDidMount() {
@@ -27,8 +26,7 @@ class Question extends Component {
   timerCount = () => {
     const time = 1000;
     setInterval(() => {
-      const { timer, stop } = this.state;
-      if (stop) return;
+      const { timer } = this.state;
       this.setState({ timer: timer - 1 });
       this.disableButtons();
     }, time);
@@ -44,9 +42,9 @@ class Question extends Component {
     });
   };
 
-  disableButtons = () => {
+  disableButtons = (par) => {
     const { timer } = this.state;
-    if (timer === 0) {
+    if (timer === 0 || par) {
       this.setState({ nextButton: true });
       const btnCorrect = document.querySelector(`#${correctdefault}`);
       const btnWrong = document.querySelectorAll(`#${wrongdefault}`);
@@ -119,6 +117,7 @@ class Question extends Component {
   };
 
   ChoiceButton = (e) => {
+    this.disableButtons(true);
     this.activeCSS();
     this.stopTimer();
     this.setState({ nextButton: true });
