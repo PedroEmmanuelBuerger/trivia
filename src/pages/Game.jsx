@@ -16,6 +16,7 @@ class Question extends Component {
     timer: 30,
     suffledQuestions: [],
     nextButton: false,
+    stop: false,
   };
 
   componentDidMount() {
@@ -26,7 +27,8 @@ class Question extends Component {
   timerCount = () => {
     const time = 1000;
     setInterval(() => {
-      const { timer } = this.state;
+      const { timer, stop } = this.state;
+      if (stop) return;
       this.setState({ timer: timer - 1 });
       this.disableButtons();
     }, time);
@@ -109,8 +111,15 @@ class Question extends Component {
     return this.setState({ suffledQuestions: shuffle });
   };
 
+  stopTimer = () => {
+    this.setState({ stop: true });
+    const { stop } = this.state;
+    return stop;
+  };
+
   ChoiceButton = (e) => {
     this.activeCSS();
+    this.stopTimer();
     this.setState({ nextButton: true });
     const { timer } = this.state;
     const { className } = e.target;
@@ -151,6 +160,7 @@ class Question extends Component {
   };
 
   nextButtonFunction = () => {
+    this.setState({ stop: false });
     const number = 4;
     this.resetTimers();
     const { i } = this.state;
