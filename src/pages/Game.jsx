@@ -110,16 +110,9 @@ class Question extends Component {
     return this.setState({ suffledQuestions: shuffle });
   };
 
-  stopTimer = () => {
-    this.setState({ stop: true });
-    const { stop } = this.state;
-    return stop;
-  };
-
   ChoiceButton = (e) => {
     this.disableButtons(true);
     this.activeCSS();
-    this.stopTimer();
     this.setState({ nextButton: true });
     const { timer } = this.state;
     const { className } = e.target;
@@ -130,9 +123,6 @@ class Question extends Component {
       const { difficulty } = currentQuestion;
       let difficuiltyPoints = 0;
       switch (difficulty) {
-      case 'easy':
-        difficuiltyPoints = 1;
-        break;
       case 'medium':
         difficuiltyPoints = 2;
         break;
@@ -140,7 +130,7 @@ class Question extends Component {
         difficuiltyPoints = three;
         break;
       default:
-        difficuiltyPoints = 0;
+        difficuiltyPoints = 1;
       }
       const points = 10;
       const timerPoints = timer;
@@ -160,7 +150,6 @@ class Question extends Component {
   };
 
   nextButtonFunction = () => {
-    this.setState({ stop: false });
     const number = 4;
     this.resetTimers();
     const { i } = this.state;

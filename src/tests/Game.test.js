@@ -273,4 +273,31 @@ describe('testa a tela de game', () => {
     const raking = await screen.findByRole('button', { name: /ranking/i })
     expect(raking).toBeInTheDocument();
   });
+  it('verifica a somataria dos pontos de todas as dificuldades de perguntas', async () => {
+    global.fetch = jest.fn(async () => ({
+        json: async () => questions,
+      }));
+      const { history } = renderWithRouterAndRedux(<App />, { ...initialState });
+      act(() => {
+        history.push('/game');
+      });
+    const score = await screen.findByTestId('header-score');
+    expect(score).toBeInTheDocument();
+    expect(score).toHaveTextContent('0');
+    const correctAnswer1 = await screen.findByRole('button', { name: /oliver stone/i });
+    userEvent.click(correctAnswer1);
+    expect(score).toHaveTextContent('40');
+    const nextbutton1 = await screen.findByRole('button', { name: /próxima/i });
+    userEvent.click(nextbutton1);
+    const correctAnswer2 = await screen.findByRole('button', { name: /Birmingham/i });
+    expect(correctAnswer2).toBeInTheDocument();
+    userEvent.click(correctAnswer2);
+    expect(score).toHaveTextContent('110');
+    const nextbutton2 = await screen.findByRole('button', { name: /próxima/i });
+    userEvent.click(nextbutton2);
+    const correctAnswer3 = await screen.findByRole('button', { name: /Trees/i });
+    expect(correctAnswer3).toBeInTheDocument();
+    userEvent.click(correctAnswer3);
+    expect(score).toHaveTextContent('210');
+  });
 });
