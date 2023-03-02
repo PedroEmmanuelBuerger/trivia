@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Proptypes from 'prop-types';
 import Header from '../components/Header';
 import { resetScoreAndAccumulated } from '../redux/actions/index';
+import '../styles/feedback.css';
 
 class Feedback extends Component {
   state = {
@@ -13,6 +14,11 @@ class Feedback extends Component {
   componentDidMount() {
     this.getAssertions();
     this.saveLocalStorage();
+  }
+
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch(resetScoreAndAccumulated());
   }
 
   saveLocalStorage = () => {
@@ -61,29 +67,37 @@ class Feedback extends Component {
     const { assertionss } = this.state;
     const { score, assertions } = this.props;
     return (
-      <div>
+      <div className="container">
         <Header />
-        <h1 data-testid="feedback-total-score">{ Number(score) }</h1>
-        <h1 data-testid="feedback-total-question">
-          { Number(assertions) }
+        <div className="feedbackCont">
+          <h1 data-testid="feedback-total-score" className="scorefeed">
+            points:
+            { Number(score) }
+          </h1>
+          <h1 data-testid="feedback-total-question" className="assertions">
+            assertions:
+            { Number(assertions) }
 
-        </h1>
-        <h1 data-testid="feedback-text">{ assertionss }</h1>
-        <button
-          type="button"
-          data-testid="btn-play-again"
-          onClick={ this.returnLogin }
-        >
-          Play Again
-        </button>
+          </h1>
+          <h1 data-testid="feedback-text" className="feedbackText">{ assertionss }</h1>
+          <button
+            type="button"
+            data-testid="btn-play-again"
+            onClick={ this.returnLogin }
+            className="playAgain"
+          >
+            Play Again
+          </button>
 
-        <button
-          type="button"
-          data-testid="btn-ranking"
-          onClick={ this.redirectionRanking }
-        >
-          Ranking
-        </button>
+          <button
+            type="button"
+            data-testid="btn-ranking"
+            onClick={ this.redirectionRanking }
+            className="ranking"
+          >
+            Ranking
+          </button>
+        </div>
       </div>
     );
   }

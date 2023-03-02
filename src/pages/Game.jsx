@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import Proptypes from 'prop-types';
 import { connect } from 'react-redux';
+import sanitizeHtml from 'sanitize-html';
 import Header from '../components/Header';
 import { addScore } from '../redux/actions/index';
-import logo from '../trivia.png';
-import './Game.css';
+import '../styles/game.css';
+import ampulheta from '../images/ampulheta.png';
 
 const correctdefault = 'defaultCorrect';
 const wrongdefault = 'defaultWrong';
@@ -16,6 +17,7 @@ class Question extends Component {
     timer: 30,
     suffledQuestions: [],
     nextButton: false,
+    stop: false,
   };
 
   componentDidMount() {
@@ -26,6 +28,8 @@ class Question extends Component {
   timerCount = () => {
     const time = 1000;
     setInterval(() => {
+      const { stop } = this.state;
+      if (stop) return;
       const { timer } = this.state;
       this.setState({ timer: timer - 1 });
       this.disableButtons();
@@ -45,7 +49,7 @@ class Question extends Component {
   disableButtons = (par) => {
     const { timer } = this.state;
     if (timer === 0 || par) {
-      this.setState({ nextButton: true });
+      this.setState({ nextButton: true, stop: true });
       const btnCorrect = document.querySelector(`#${correctdefault}`);
       const btnWrong = document.querySelectorAll(`#${wrongdefault}`);
       btnCorrect.disabled = true;
@@ -150,6 +154,7 @@ class Question extends Component {
   };
 
   nextButtonFunction = () => {
+    this.setState({ stop: false });
     const number = 4;
     this.resetTimers();
     const { i } = this.state;
@@ -174,33 +179,44 @@ class Question extends Component {
   render() {
     const { questions, i, suffledQuestions, timer, nextButton } = this.state;
     const currentQuestion = questions[i];
+    const clean = (currentQuestion) ? sanitizeHtml(currentQuestion.question) : '';
     return (
       <div>
-        <Header />
-        <div className="App">
-          <header className="App-header">
-            <img src={ logo } className="App-logo" width="150px" alt="logo" />
-          </header>
-          {currentQuestion ? (
-            <div>
-              <h1 data-testid="question-category">{currentQuestion.category}</h1>
-              <h2 data-testid="question-text">{currentQuestion.question}</h2>
-              <div data-testid="answer-options">
-                { suffledQuestions }
-              </div>
-              {timer > 0 ? <h1>{ timer }</h1> : <h1>Acabou o tempo!!</h1>}
-              {nextButton ? (
-                <button
-                  data-testid="btn-next"
-                  type="button"
-                  onClick={ () => this.nextButtonFunction() }
-                >
-                  próxima
-                </button>
-              ) : null}
+        <Header className="HeaderFirst" />
+        {currentQuestion ? (
+          <div className="game">
+            <h1 data-testid="question-category" className="categoryQuestion">
+              {currentQuestion.category}
+            </h1>
+            <h2
+              data-testid="question-text"
+              className="questionText"
+            >
+              {clean}
+
+            </h2>
+            <div data-testid="answer-options" className="allAnswers">
+              { suffledQuestions }
             </div>
-          ) : 'Loading...'}
-        </div>
+            {timer > 0 ? (
+              <div>
+                <h1 className="timer">{ timer }</h1>
+                <img src={ ampulheta } alt="ampulheta" className="imageAmp" />
+              </div>
+            )
+              : <h1 className="end">Acabou o tempo!!</h1>}
+            {nextButton ? (
+              <button
+                data-testid="btn-next"
+                type="button"
+                onClick={ () => this.nextButtonFunction() }
+                className="nextButton"
+              >
+                próxima
+              </button>
+            ) : null}
+          </div>
+        ) : <p className="Loading">Loading...</p>}
       </div>
     );
   }

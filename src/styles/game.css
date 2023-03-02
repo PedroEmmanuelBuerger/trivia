@@ -1,0 +1,162 @@
+body {
+    background-color: #5c5b5b;
+    font-family: monospace;
+    font-size: 1.2rem;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.categoryQuestion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    color: #ebf82d;
+  }
+
+.questionText {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #f0f5b1;
+}
+
+.allAnswers {
+    align-items: center;
+    color: #ebf82d;
+}
+
+.allAnswers button {
+    background-color: #363636;
+    color: #dfdddd;
+    font-size: 20px;
+    width: 100%;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5%;
+}
+
+.allAnswers button:hover {
+    background-color: #dfdddd;
+    color: #363636;
+}
+
+.allAnswers button:active {
+    background-color: #363636;
+    color: #dfdddd;
+}
+
+.allAnswers button:disabled {
+    cursor: not-allowed;
+}
+
+.wrong-answer:disabled { 
+  background-color: red;
+}
+
+.wrong-answer:disabled:hover {
+  background-color: red;
+  color: #dfdddd;
+}
+
+@keyframes flash {
+  0% {
+   opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.correct-answer:disabled {
+  background-color: green;
+  animation-duration: 0.2s;
+  animation-iteration-count: 3;
+  animation-name: flash;
+}
+
+.correct-answer:disabled:hover {
+  background-color: green;
+  color: #dfdddd;
+}
+
+.Loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    color: #ebf82d;
+}
+
+.timer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    color: #ebf82d;
+}
+
+.timer p {
+    font-size: 30px;
+    font-weight: monospace;
+    margin: 20px;
+    color: #f0f5b1;
+}
+
+.end {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    color: #ebf82d;
+}
+
+.nextButton {
+    background-color: #363636;
+    color: #20f731;
+    font-size: 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5%;
+}
+
+.nextButton:hover {
+    background-color: #20f731;
+    color: #363636;
+}
+
+@keyframes rolling {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.imageAmp {
+    font-size: 10px;
+    color: #f0f5b1;
+    width: 70px;
+    height: 70px;
+    margin: 10px;
+    animation-duration: 2.5s;
+    animation-iteration-count: infinite;
+    animation-name: rolling;
+}
+
+.nextButton:disabled {
+    cursor: not-allowed;
+}

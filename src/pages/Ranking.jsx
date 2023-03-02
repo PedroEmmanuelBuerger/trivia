@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Proptypes from 'prop-types';
+import '../styles/ranking.css';
 
 class Ranking extends Component {
   state = {
@@ -28,13 +29,15 @@ class Ranking extends Component {
     const { allPlayers } = this.state;
     const allPlayersSortByScore = allPlayers.sort((a, b) => b.score - a.score);
     return (
-      <div>
-        <h1 data-testid="ranking-title">Ranking</h1>
+      <div className="containerPlayer">
+        <h1 data-testid="ranking-title" className="titleRanking">Ranking</h1>
         {allPlayersSortByScore.map((player, index) => (
-          <div key={ index }>
-            <img src={ `https://www.gravatar.com/avatar/${player.picture}` } alt="gravatar" />
-            <p data-testid={ `player-name-${index}` }>{player.name}</p>
-            <p data-testid={ `player-score-${index}` }>{player.score}</p>
+          <div key={ index } className="divPlayer">
+            <img src={ `https://www.gravatar.com/avatar/${player.picture}` } alt="gravatar" className="playerImg" />
+            <p data-testid={ `player-name-${index}` } className="textR">{player.name}</p>
+            <p data-testid={ `player-score-${index}` } className="scoreR">
+              {player.score}
+            </p>
           </div>
         ))}
         <button

@@ -1,0 +1,77 @@
+
+@keyframes changeColorFont {
+    0% {
+        color: #ebf82d;
+    }
+    50% {
+        color: #dfdddd;
+    }
+    100% {
+        color: #ebf82d;
+    }
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-image: url('../images/jeeh_quiz_game_background_fc187e16-9ee2-4482-b355-a877c6e62bc8.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.scorefeed {
+color: #29bb05;
+font-size: 30px;
+}
+
+.assertions {
+color: #29bb05;
+font-size: 30px;
+}
+
+.feedbackText {
+color: yellow;
+font-size: 50px;
+font-family: monospace;
+animation: changeColorFont 1s infinite;
+}
+
+button {
+    background-color: #5a5a5a;
+    color: #dfdddd;
+    font-size: 20px;
+    width: 150px;
+    margin: 10px;
+    border: none;
+    border-radius: 5%;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.playAgain:hover {
+    background-color: #dfdddd;
+    color: #363636;
+}
+
+.ranking:hover {
+    background-color: #dfdddd;
+    color: #363636;
+}
+
+.feedbackCont {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin : 20px;
+  background-color: #030303c9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  padding: 20px;
+  width: 500px;
+  height: 450px;
+  margin-top: 100px;
+}

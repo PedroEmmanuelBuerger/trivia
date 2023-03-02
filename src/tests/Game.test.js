@@ -23,7 +23,6 @@ describe('testa a tela de game', () => {
       act(() => {
         history.push('/game');
       });
-    const logo = screen.getByAltText('logo');
     const userName = await screen.findByTestId('header-player-name');
     const gravatar = await screen.findByTestId('header-profile-picture');
     const score = await screen.findByTestId('header-score');
@@ -34,7 +33,6 @@ describe('testa a tela de game', () => {
     const correctAnswer = await screen.findByTestId('correct-answer');
     const timer = screen.getByRole('heading', { name: /30/i });
     expect(userName).toBeInTheDocument();
-    expect(logo).toBeInTheDocument();
     expect(gravatar).toBeInTheDocument();
     expect(gravatar).toHaveAttribute('src', 'https://www.gravatar.com/avatar/1676a90f5c41d1f639a00b8519104ec9');
     expect(score).toBeInTheDocument();

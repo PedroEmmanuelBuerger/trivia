@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
 import Proptypes from 'prop-types';
 import { saveInfoUser } from '../redux/actions/index';
+import '../styles/login.css';
 
 class Login extends Component {
   state = {
@@ -48,48 +49,53 @@ class Login extends Component {
     const { buttonValidation } = this.state;
     const { history } = this.props;
     return (
-      <div>
-        <form
-          onSubmit={ (e) => {
-            e.preventDefault();
-            this.buttonPlay();
-          } }
-        >
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            name="name"
-            id="nae"
-            onChange={ this.handleChange }
-            data-testid="input-player-name"
-          />
-          <label
-            htmlFor="email"
+      <div className="containerLogin">
+        <div className="style">
+          <form
+            className="login"
+            onSubmit={ (e) => {
+              e.preventDefault();
+              this.buttonPlay();
+            } }
           >
-            Email
-          </label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            data-testid="input-gravatar-email"
-            onChange={ this.handleChange }
-          />
+            <label htmlFor="name">Name</label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              className="input-login"
+              onChange={ this.handleChange }
+              data-testid="input-player-name"
+            />
+            <label
+              htmlFor="email"
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              className="input-login"
+              id="email"
+              data-testid="input-gravatar-email"
+              onChange={ this.handleChange }
+            />
+            <button
+              type="submit"
+              data-testid="btn-play"
+              disabled={ buttonValidation }
+            >
+              Play
+            </button>
+          </form>
           <button
-            type="submit"
-            data-testid="btn-play"
-            disabled={ buttonValidation }
+            type="button"
+            onClick={ () => history.push('/settings') }
+            data-testid="btn-settings"
           >
-            Play
+            configurações
           </button>
-        </form>
-        <button
-          type="button"
-          onClick={ () => history.push('/settings') }
-          data-testid="btn-settings"
-        >
-          configurações
-        </button>
+        </div>
       </div>
     );
   }
